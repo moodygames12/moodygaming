@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moodygames</title>
+  <style>
+    body {
+      color: black;
+      background-color: black;
+      font-family: Arial, sans-serif;
+    }
+
+    h1, p {
+      color: blue;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      padding: 12px 40px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #settingsModal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      color: white;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    .settings-box {
+      background-color: #222;
+      padding: 30px;
+      border-radius: 15px;
+      display: inline-block;
+    }
+
+    label, input {
+      margin: 10px;
+      font-size: 18px;
+    }
+
+    input[type="text"], input[type="url"], input[type="color"] {
+      padding: 8px;
+      border-radius: 8px;
+      width: 80%;
+    }
+
+    #calcModal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      color: white;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    .calculator {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+    }
+
+    .calculator button {
+      font-size: 18px;
+      padding: 15px;
+      margin: 5px;
+      width: 80px;
+    }
+
+    #calcInput {
+      padding: 10px;
+      width: 100%;
+      margin: 10px 0;
+      font-size: 20px;
+      border-radius: 8px;
+    }
+
+    .ticker-container {
+      width: 100%;
+      overflow: hidden;
+      background-color: #222;
+      color: white;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 18px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+    }
+
+    .ticker-wrapper {
+      width: 100%;
+      padding-left: 100%;
+    }
+
+    @keyframes ticker {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
+
+    .ticker-transition {
+      display: inline-block;
+      white-space: nowrap;
+      padding-right: 100%;
+      animation: ticker 20s linear infinite;
+    }
+
+    .ticker-transition:hover {
+      animation-play-state: paused;
+      cursor: pointer;
+    }
+
+    .ticker-item {
+      display: inline-block;
+      padding: 0 2rem;
+    }
+  </style>
+</head>
+<body id="mainBody">
+  <h1 id="mainTitle">Moodygames</h1>
+  <p id="mainText">Hey there, wanna play some games?</p>
+
+  <div id="gameButtons">
+    <button onclick="openFullscreen('https://moodyworksheetz.weebly.com')">Moodygames</button>
+    <button onclick="openFullscreen('https://deadshot.io')">Deadshot</button>
+    <button onclick="openFullscreen('https://drippy-cat.github.io/snowrider3D/')">Snowrider</button>
+    <button onclick="openFullscreen('https://ixlmathwork.netlify.app')">Interstellar</button>
+    <button onclick="openFullscreen('https://slopeio.org/')">Slope</button>
+    <button onclick="openFullscreen('https://ragdollhit.io/')">Ragdoll hit</button>
+    <button onclick="openFullscreen('https://gamesuperhot.github.io/play/moto-x3m-2.html')">Motox3m</button>
+    <button onclick="openFullscreen('https://q-bit.netlify.app/')">Qbit</button>
+    <button onclick="openFullscreen('https://footynewsthe2nd.weebly.com/')">Footy</button>
+    <button onclick="openFullscreen('https://deepai.org/chat/chatgpt-alternative')">Offbrand chatgpt</button>
+    <button onclick="showAddGameForm()">Add Your Own Game</button> <!-- Added the button -->
+  </div>
+
+  <div id="addGameModal" class="modal">
+    <span class="close-btn" onclick="closeAddGameForm()">&times;</span>
+    <div class="settings-box">
+      <h2>Add Your Own Game</h2>
+      <label for="gameName">Game Name:</label>
+      <input type="text" id="gameName" placeholder="Enter game name"><br>
+
+      <label for="gameURL">Game URL:</label>
+      <input type="url" id="gameURL" placeholder="Enter game URL"><br>
+
+      <button onclick="addGame()">Add Game</button>
+      <button onclick="closeAddGameForm()">Cancel</button>
+    </div>
+  </div>
+
+  <button onclick="openSettings()">Settings</button>
+  <button onclick="openCalculator()">Calculator</button>
+
+  <div id="fullscreenModal" class="modal">
+    <span class="close-btn" onclick="closeFullscreen()">&times;</span>
+    <iframe id="gameIframe" src=""></iframe>
+  </div>
+
+  <div id="settingsModal">
+    <div class="settings-box">
+      <h2>Customize Appearance</h2>
+      <label for="textColor">Text Color:</label>
+      <input type="color" id="textColor"><br>
+
+      <label for="bgColor">Background Color:</label>
+      <input type="color" id="bgColor"><br>
+
+      <label for="btnColor">Button Color:</label>
+      <input type="color" id="btnColor"><br>
+
+      <label for="customGreeting">Custom Greeting:</label>
+      <input type="text" id="customGreeting" placeholder="Hey there, wanna play some games?"><br>
+
+      <label for="keybindKey">Escape Keybind (e.g. z):</label>
+      <input type="text" id="keybindKey" maxlength="1" style="width: 40px;"><br>
+
+      <label><input type="checkbox" id="showTicker" checked> Show Meme Ticker</label><br><br>
+
+      <button onclick="applySettings()">Apply</button>
+      <button onclick="restoreDefaults()">Restore Defaults</button>
+      <button onclick="closeSettings()">Close</button>
+    </div>
+  </div>
+
+  <div id="calcModal" class="modal">
+    <span class="close-btn" onclick="closeCalculator()">&times;</span>
+    <div class="calculator">
+      <input type="text" id="calcInput" placeholder="Enter expression">
+      <div>
+        <button onclick="insertCalc('+')">+</button>
+        <button onclick="insertCalc('-')">−</button>
+        <button onclick="insertCalc('×')">×</button>
+        <button onclick="insertCalc('÷')">÷</button>
+      </div>
+      <div>
+        <button onclick="insertCalc('sqrt(')">sqrt(</button>
+        <button onclick="insertCalc('^')">^</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="clearCalc()">C</button>
+      </div>
+      <p id="calcResult">Result: </p>
+    </div>
+  </div>
+
+  <div class="ticker-container">
+    <div class="ticker-wrapper">
+      <div class="ticker-transition">
+        <div class="ticker-item">"When the homework is too much, but you still gotta play!" 😂</div>
+        <div class="ticker-item">"Just finished a game, now back to pretending to study." 😜</div>
+        <div class="ticker-item">"That moment when you ace a game level but fail the test." 😅</div>
+        <div class="ticker-item">"Gaming > Homework. Priorities, right?" 🎮</div>
+        <div class="ticker-item">"Tralalelo Tralala" 🦈</div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
+  <script>
+    function insertCalc(value) {
+      document.getElementById("calcInput").value += value;
+    }
+
+    function calculate() {
+      const input = document.getElementById("calcInput").value.trim();
+      try {
+        let expression = input
+          .replace(/sqrt\(/gi, "Math.sqrt(")
+          .replace(/\^/g, "**")
+          .replace(/×/g, "*")
+          .replace(/÷/g, "/");
+        const result = eval(expression);
+        document.getElementById("calcResult").innerText = "Result: " + result;
+      } catch (err) {
+        document.getElementById("calcResult").innerText = "Error!";
+      }
+    }
+
+    function clearCalc() {
+      document.getElementById("calcInput").value = "";
+      document.getElementById("calcResult").innerText = "Result: ";
+    }
+
+    function openCalculator() {
+      document.getElementById("calcModal").style.display = "block";
+    }
+
+    function closeCalculator() {
+      document.getElementById("calcModal").style.display = "none";
+    }
+
+    function showAddGameForm() {
+      document.getElementById("addGameModal").style.display = "block";
+    }
+
+    function closeAddGameForm() {
+      document.getElementById("addGameModal").style.display = "none";
+    }
+
+    function addGame() {
+      const gameName = document.getElementById("gameName").value;
+      const gameURL = document.getElementById("gameURL").value;
+      if (gameName && gameURL) {
+        const gameButton = document.createElement("button");
+        gameButton.innerText = gameName;
+        gameButton.onclick = () => openFullscreen(gameURL);
+        document.getElementById("gameButtons").appendChild(gameButton);
+        closeAddGameForm();
+      }
+    }
+
+    function openFullscreen(url) {
+      document.getElementById("gameIframe").src = url;
+      document.getElementById("fullscreenModal").style.display = "block";
+    }
+
+    function closeFullscreen() {
+      document.getElementById("fullscreenModal").style.display = "none";
+      document.getElementById("gameIframe").src = "";
+    }
+
+    function openSettings() {
+      document.getElementById("settingsModal").style.display = "block";
+    }
+
+    function closeSettings() {
+      document.getElementById("settingsModal").style.display = "none";
+    }
+
+    function applySettings() {
+      document.body.style.color = document.getElementById("textColor").value;
+      document.body.style.backgroundColor = document.getElementById("bgColor").value;
+      document.querySelectorAll("button").forEach(btn => btn.style.backgroundColor = document.getElementById("btnColor").value);
+      document.getElementById("mainText").innerText = document.getElementById("customGreeting").value;
+    }
+
+    function restoreDefaults() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>
+
+
